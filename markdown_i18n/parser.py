@@ -28,8 +28,8 @@ class I18NTreeProcessor(Treeprocessor):
         lang = self.extension.getConfig('i18n_lang')
         translations = Translations.load(i18n_dir, locales=[lang])
 
-        childs = root.getchildren()
-        for idx, child in enumerate(childs):
+        children = root.getchildren()
+        for idx, child in enumerate(children):
             if re.match(TRANSLATE_TAGS_RE, child.tag):
                 translatable = child.text or ''
                 translatable += '\n'.join([

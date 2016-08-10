@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
-import logging
 import os
+import re
 
 from markdown.treeprocessors import Treeprocessor
 from markdown.util import etree
@@ -10,7 +10,7 @@ from babel.messages import pofile
 from babel.support import Translations
 
 
-logger = logging.getLogger(__name__)
+TRANSLATE_TAGS_RE = re.compile('^(p|h[1-6])$')
 
 
 class I18NTreeProcessor(Treeprocessor):
@@ -30,7 +30,7 @@ class I18NTreeProcessor(Treeprocessor):
 
         childs = root.getchildren()
         for idx, child in enumerate(childs):
-            if child.tag in ('p', 'h1'):
+            if re.match(TRANSLATE_TAGS_RE, child.tag):
                 translatable = child.text or ''
                 translatable += '\n'.join([
                     etree.tostring(c) for c in child.getchildren() if c.tag != 'code'

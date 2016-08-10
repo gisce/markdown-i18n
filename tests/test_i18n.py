@@ -132,27 +132,28 @@ class I18nTest(unittest.TestCase):
             )
         self.assertEqual(expected, result)
 
-    def test_header(self):
-        text = "# This is a h1"
-        expected = '<h1>Esto es un h1</h1>'
-        with TempDir() as d:
-            c = catalog.Catalog(locale='es_ES')
-            c.add('This is a h1', 'Esto es un h1')
-            os.mkdir(os.path.join(d.dir, 'es_ES'))
-            lc_messages = os.path.join(d.dir, 'es_ES', 'LC_MESSAGES')
-            os.mkdir(lc_messages)
-            mo_file = os.path.join(lc_messages, 'messages.mo')
-            with open(mo_file, 'w') as f:
-                mofile.write_mo(f, c)
+    def test_headers(self):
+        for x in range(1, 7):
+            text = "{0} This is a h{1}".format('#' * x, x)
+            expected = '<h{0}>Esto es un h{0}</h{0}>'.format(x)
+            with TempDir() as d:
+                c = catalog.Catalog(locale='es_ES')
+                c.add('This is a h{0}'.format(x), 'Esto es un h{0}'.format(x))
+                os.mkdir(os.path.join(d.dir, 'es_ES'))
+                lc_messages = os.path.join(d.dir, 'es_ES', 'LC_MESSAGES')
+                os.mkdir(lc_messages)
+                mo_file = os.path.join(lc_messages, 'messages.mo')
+                with open(mo_file, 'w') as f:
+                    mofile.write_mo(f, c)
 
-            result = markdown(
-                text,
-                extensions=['markdown_i18n'],
-                extension_configs={
-                    'markdown_i18n': {'i18n_dir': d.dir, 'i18n_lang': 'es_ES'}
-                }
-            )
-        self.assertEqual(expected, result)
+                result = markdown(
+                    text,
+                    extensions=['markdown_i18n'],
+                    extension_configs={
+                        'markdown_i18n': {'i18n_dir': d.dir, 'i18n_lang': 'es_ES'}
+                    }
+                )
+            self.assertEqual(expected, result)
 
     @unittest.skip('working on it')
     def test_no_translate_code(self):

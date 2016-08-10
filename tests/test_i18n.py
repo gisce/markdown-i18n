@@ -20,7 +20,7 @@ class TempDir(object):
         shutil.rmtree(self.dir)
 
 
-class i18nJinjaTest(unittest.TestCase):
+class I18nTest(unittest.TestCase):
     """Basic test for i18n jinja
     """
 
@@ -31,8 +31,8 @@ class i18nJinjaTest(unittest.TestCase):
             text = "this is a simple text"
             markdown(
                 text,
-                extensions=['i18n'],
-                extension_configs={'i18n': {'i18n_dir': d.dir}}
+                extensions=['markdown_i18n'],
+                extension_configs={'markdown_i18n': {'i18n_dir': d.dir}}
             )
             self.assertTrue(os.path.exists(pot_file))
 
@@ -57,9 +57,9 @@ class i18nJinjaTest(unittest.TestCase):
 
             result = markdown(
                 text,
-                extensions=['i18n'],
+                extensions=['markdown_i18n'],
                 extension_configs={
-                    'i18n': {'i18n_dir': d.dir, 'i18n_lang': 'es_ES'}
+                    'markdown_i18n': {'i18n_dir': d.dir, 'i18n_lang': 'es_ES'}
                 }
             )
         self.assertEqual(expected, result)
@@ -79,9 +79,9 @@ class i18nJinjaTest(unittest.TestCase):
 
             result = markdown(
                 text,
-                extensions=['i18n'],
+                extensions=['markdown_i18n'],
                 extension_configs={
-                    'i18n': {'i18n_dir': d.dir, 'i18n_lang': 'es_ES'}
+                    'markdown_i18n': {'i18n_dir': d.dir, 'i18n_lang': 'es_ES'}
                 }
             )
         self.assertEqual(expected, result)
@@ -101,9 +101,9 @@ class i18nJinjaTest(unittest.TestCase):
 
             result = markdown(
                 text,
-                extensions=['i18n'],
+                extensions=['markdown_i18n'],
                 extension_configs={
-                    'i18n': {'i18n_dir': d.dir, 'i18n_lang': 'es_ES'}
+                    'markdown_i18n': {'i18n_dir': d.dir, 'i18n_lang': 'es_ES'}
                 }
             )
         self.assertEqual(expected, result)
@@ -125,9 +125,9 @@ class i18nJinjaTest(unittest.TestCase):
 
             result = markdown(
                 text,
-                extensions=['i18n'],
+                extensions=['markdown_i18n'],
                 extension_configs={
-                    'i18n': {'i18n_dir': d.dir, 'i18n_lang': 'es_ES'}
+                    'markdown_i18n': {'i18n_dir': d.dir, 'i18n_lang': 'es_ES'}
                 }
             )
         self.assertEqual(expected, result)
@@ -147,9 +147,9 @@ class i18nJinjaTest(unittest.TestCase):
 
             result = markdown(
                 text,
-                extensions=['i18n'],
+                extensions=['markdown_i18n'],
                 extension_configs={
-                    'i18n': {'i18n_dir': d.dir, 'i18n_lang': 'es_ES'}
+                    'markdown_i18n': {'i18n_dir': d.dir, 'i18n_lang': 'es_ES'}
                 }
             )
         self.assertEqual(expected, result)
@@ -170,9 +170,9 @@ class i18nJinjaTest(unittest.TestCase):
         with TempDir() as d:
             result = markdown(
                 text,
-                extensions=['i18n'],
+                extensions=['markdown_i18n'],
                 extension_configs={
-                    'i18n': {'i18n_dir': d.dir, 'i18n_lang': 'es_ES'}
+                    'markdown_i18n': {'i18n_dir': d.dir, 'i18n_lang': 'es_ES'}
                 }
             )
         self.assertEqual(expected, result)

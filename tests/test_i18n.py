@@ -155,6 +155,32 @@ class I18nTest(unittest.TestCase):
                 )
             self.assertEqual(expected, result)
 
+    def test_merge_existing_pot(self):
+        with TempDir() as d:
+            pot_file = os.path.join(d.dir, 'messages.pot')
+
+            text1 = "this is a simple text"
+            markdown(
+                text1,
+                extensions=['markdown_i18n'],
+                extension_configs={'markdown_i18n': {'i18n_dir': d.dir}}
+            )
+
+            self.assertTrue(os.path.exists(pot_file))
+
+            text2 = "another text"
+            markdown(
+                text2,
+                extensions=['markdown_i18n'],
+                extension_configs={'markdown_i18n': {'i18n_dir': d.dir}}
+            )
+
+            with open(pot_file, 'r') as f:
+                catalog = pofile.read_po(f)
+                self.assertEqual(len(catalog), 2)
+                self.assertIn(text1, catalog)
+                self.assertIn(text2, catalog)
+
     @unittest.skip('working on it')
     def test_no_translate_code(self):
         text = ('```bash\n'

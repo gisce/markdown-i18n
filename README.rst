@@ -6,6 +6,13 @@ Markdown i18n
 
 This is an extension for `Python Markdown <http://pythonhosted.org/Markdown/>`_
 
+Install
+-------
+
+.. code-block::
+
+  $ pip install markdown-i18n
+
 Configure
 ---------
 

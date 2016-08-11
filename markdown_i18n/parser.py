@@ -22,8 +22,13 @@ class I18NTreeProcessor(Treeprocessor):
     def run(self, root):
 
         i18n_dir = self.extension.getConfig('i18n_dir')
+        pot_path = os.path.join(i18n_dir, 'messages.pot')
 
-        catalog = Catalog()
+        if os.path.exists(pot_path):
+            with open(pot_path, 'r') as f:
+                catalog = pofile.read_po(f)
+        else:
+            catalog = Catalog()
 
         lang = self.extension.getConfig('i18n_lang')
         translations = Translations.load(i18n_dir, locales=[lang])
@@ -46,8 +51,6 @@ class I18NTreeProcessor(Treeprocessor):
                         root.insert(idx, new_node)
                     except etree.ParseError:
                         pass
-
-        pot_path = os.path.join(i18n_dir, 'messages.pot')
 
         with open(pot_path, 'w') as pot_file:
             pofile.write_po(pot_file, catalog)

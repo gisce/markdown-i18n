@@ -158,12 +158,23 @@ class I18nTest(unittest.TestCase):
     def test_ulists(self):
         text = "* First element.\n * Second element.\n"
         expected = """<ul>
-<li>First element.</li>
+<li>Primer elemento.</li>
 
-<li>Second element.</li>
+<li>Segundo elemento.</li>
 </ul>"""
         with TempDir() as d:
             c = catalog.Catalog(locale='es_ES')
+            c.add(
+                """
+<li>First element.</li>
+
+<li>Second element.</li>
+""", """
+<li>Primer elemento.</li>
+
+<li>Segundo elemento.</li>
+"""
+            )
             os.mkdir(os.path.join(d.dir, 'es_ES'))
             lc_messages = os.path.join(d.dir, 'es_ES', 'LC_MESSAGES')
             os.mkdir(lc_messages)

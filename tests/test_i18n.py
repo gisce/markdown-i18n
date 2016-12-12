@@ -155,6 +155,79 @@ class I18nTest(unittest.TestCase):
                 )
             self.assertEqual(expected, result)
 
+    def test_ulists(self):
+        text = "* First element.\n * Second element.\n"
+        expected = """<ul>
+<li>Primer elemento.</li>
+
+<li>Segundo elemento.</li>
+</ul>"""
+        with TempDir() as d:
+            c = catalog.Catalog(locale='es_ES')
+            c.add(
+                """
+<li>First element.</li>
+
+<li>Second element.</li>
+""", """
+<li>Primer elemento.</li>
+
+<li>Segundo elemento.</li>
+"""
+            )
+            os.mkdir(os.path.join(d.dir, 'es_ES'))
+            lc_messages = os.path.join(d.dir, 'es_ES', 'LC_MESSAGES')
+            os.mkdir(lc_messages)
+            mo_file = os.path.join(lc_messages, 'messages.mo')
+            with open(mo_file, 'w') as f:
+                mofile.write_mo(f, c)
+
+            result = markdown(
+                text,
+                extensions=['markdown_i18n'],
+                extension_configs={
+                    'markdown_i18n': {'i18n_dir': d.dir, 'i18n_lang': 'es_ES'}
+                }
+            )
+        self.assertEqual(expected, result)
+
+    def test_nlists(self):
+        text = "1. First element.\n 2. Second element.\n"
+        expected = """<ol>
+<li>Primer elemento.</li>
+
+<li>Segundo elemento.</li>
+</ol>"""
+        with TempDir() as d:
+            c = catalog.Catalog(locale='es_ES')
+            c.add(
+                """
+<li>First element.</li>
+
+<li>Second element.</li>
+""", """
+<li>Primer elemento.</li>
+
+<li>Segundo elemento.</li>
+"""
+            )
+            os.mkdir(os.path.join(d.dir, 'es_ES'))
+            lc_messages = os.path.join(d.dir, 'es_ES', 'LC_MESSAGES')
+            os.mkdir(lc_messages)
+            mo_file = os.path.join(lc_messages, 'messages.mo')
+            with open(mo_file, 'w') as f:
+                mofile.write_mo(f, c)
+
+            result = markdown(
+                text,
+                extensions=['markdown_i18n'],
+                extension_configs={
+                    'markdown_i18n': {'i18n_dir': d.dir,
+                                      'i18n_lang': 'es_ES'}
+                }
+            )
+        self.assertEqual(expected, result)
+
     def test_merge_existing_pot(self):
         with TempDir() as d:
             pot_file = os.path.join(d.dir, 'messages.pot')

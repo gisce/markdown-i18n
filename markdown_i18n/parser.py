@@ -30,8 +30,11 @@ class I18NTreeProcessor(Treeprocessor):
                 ])
                 if translatable:
                     catalog.add(translatable)
-                    content = '<{0}>{1}</{0}>'.format(
-                        child.tag, translations.gettext(translatable)
+                    attrs = ' '.join((
+                        '{}="{}"'.format(k, v) for k, v in child.attrib.items()
+                    ))
+                    content = '<{0} {2}>{1}</{0}>'.format(
+                        child.tag, translations.gettext(translatable), attrs
                     )
                     try:
                         new_node = etree.fromstring(content.encode('utf-8'))

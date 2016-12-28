@@ -140,7 +140,7 @@ class I18nTest(unittest.TestCase):
     def test_headers(self):
         for x in range(1, 7):
             text = "{0} This is a h{1}".format('#' * x, x)
-            expected = '<h{0}>Esto es un h{0}</h{0}>'.format(x)
+            expected = '<h{0} id="this-is-a-h{0}">Esto es un h{0}</h{0}>'.format(x)
             with TempDir() as d:
                 c = catalog.Catalog(locale='es_ES')
                 c.add('This is a h{0}'.format(x), 'Esto es un h{0}'.format(x))
@@ -153,7 +153,7 @@ class I18nTest(unittest.TestCase):
 
                 result = markdown(
                     text,
-                    extensions=['markdown_i18n'],
+                    extensions=['markdown.extensions.toc', 'markdown_i18n'],
                     extension_configs={
                         'markdown_i18n': {'i18n_dir': d.dir, 'i18n_lang': 'es_ES'}
                     }

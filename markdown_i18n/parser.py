@@ -9,7 +9,7 @@ from babel.messages.catalog import Catalog
 from babel.messages import pofile
 from babel.support import Translations
 
-TRANSLATE_TAGS_RE = re.compile('^(ol|ul|p|h[1-6]|th|td)$')
+TRANSLATE_TAGS_RE = re.compile('^(li|p|h[1-6]|th|td)$')
 
 
 class I18NTreeProcessor(Treeprocessor):

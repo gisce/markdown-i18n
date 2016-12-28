@@ -169,17 +169,8 @@ class I18nTest(unittest.TestCase):
 </ul>"""
         with TempDir() as d:
             c = catalog.Catalog(locale='es_ES')
-            c.add(
-                """
-<li>First element.</li>
-
-<li>Second element.</li>
-""", """
-<li>Primer elemento.</li>
-
-<li>Segundo elemento.</li>
-"""
-            )
+            c.add("First element.", "Primer elemento.")
+            c.add("Second element.", "Segundo elemento.")
             os.mkdir(os.path.join(d.dir, 'es_ES'))
             lc_messages = os.path.join(d.dir, 'es_ES', 'LC_MESSAGES')
             os.mkdir(lc_messages)
@@ -194,7 +185,7 @@ class I18nTest(unittest.TestCase):
                     'markdown_i18n': {'i18n_dir': d.dir, 'i18n_lang': 'es_ES'}
                 }
             )
-        self.assertEqual(expected, result)
+        self.assertEqual(clean_xml(expected), clean_xml(result))
 
     def test_nlists(self):
         text = "1. First element.\n 2. Second element.\n"
@@ -205,17 +196,8 @@ class I18nTest(unittest.TestCase):
 </ol>"""
         with TempDir() as d:
             c = catalog.Catalog(locale='es_ES')
-            c.add(
-                """
-<li>First element.</li>
-
-<li>Second element.</li>
-""", """
-<li>Primer elemento.</li>
-
-<li>Segundo elemento.</li>
-"""
-            )
+            c.add("First element.", "Primer elemento.")
+            c.add("Second element.", "Segundo elemento.")
             os.mkdir(os.path.join(d.dir, 'es_ES'))
             lc_messages = os.path.join(d.dir, 'es_ES', 'LC_MESSAGES')
             os.mkdir(lc_messages)
@@ -231,7 +213,7 @@ class I18nTest(unittest.TestCase):
                                       'i18n_lang': 'es_ES'}
                 }
             )
-        self.assertEqual(expected, result)
+        self.assertEqual(clean_xml(expected), clean_xml(result))
 
     def test_merge_existing_pot(self):
         with TempDir() as d:

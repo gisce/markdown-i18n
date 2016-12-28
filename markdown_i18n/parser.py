@@ -9,7 +9,7 @@ from babel.messages.catalog import Catalog
 from babel.messages import pofile
 from babel.support import Translations
 
-TRANSLATE_TAGS_RE = re.compile('^(ol|ul|p|h[1-6])$')
+TRANSLATE_TAGS_RE = re.compile('^(ol|ul|p|h[1-6]|th|td)$')
 
 
 class I18NTreeProcessor(Treeprocessor):
@@ -17,6 +17,30 @@ class I18NTreeProcessor(Treeprocessor):
     def __init__(self, md, extension):
         self.extension = extension
         super(I18NTreeProcessor, self).__init__(md)
+
+    def translate(self, catalog, translations, root):
+        children = root.getchildren()
+        for idx, child in enumerate(children):
+            if re.match(TRANSLATE_TAGS_RE, child.tag):
+                translatable = child.text or ''
+                translatable += '\n'.join([
+                    etree.tostring(c) for c in
+                        child.getchildren() if
+                            c.tag != 'code'
+                ])
+                if translatable:
+                    catalog.add(translatable)
+                    content = '<{0}>{1}</{0}>'.format(
+                        child.tag, translations.gettext(translatable)
+                    )
+                    try:
+                        new_node = etree.fromstring(content.encode('utf-8'))
+                        root.remove(child)
+                        root.insert(idx, new_node)
+                    except etree.ParseError:
+                        pass
+            else:
+                self.translate(catalog, translations, child)
 
     def run(self, root):
 
@@ -31,25 +55,7 @@ class I18NTreeProcessor(Treeprocessor):
 
         lang = self.extension.getConfig('i18n_lang')
         translations = Translations.load(i18n_dir, locales=[lang])
-
-        children = root.getchildren()
-        for idx, child in enumerate(children):
-            if re.match(TRANSLATE_TAGS_RE, child.tag):
-                translatable = child.text or ''
-                translatable += '\n'.join([
-                    etree.tostring(c) for c in child.getchildren() if c.tag != 'code'
-                ])
-                if translatable:
-                    catalog.add(translatable)
-                    content = '<{0}>{1}</{0}>'.format(
-                        child.tag, translations.gettext(translatable)
-                    )
-                    try:
-                        new_node = etree.fromstring(content.encode('utf-8'))
-                        root.remove(child)
-                        root.insert(idx, new_node)
-                    except etree.ParseError:
-                        pass
+        self.translate(catalog, translations, root)
 
         with open(pot_path, 'w') as pot_file:
             pofile.write_po(pot_file, catalog)

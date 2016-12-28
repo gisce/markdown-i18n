@@ -30,11 +30,9 @@ class I18NTreeProcessor(Treeprocessor):
                 ])
                 if translatable:
                     catalog.add(translatable)
-                    content = '<{0}>{1}</{0}>'.format(
-                        child.tag, translations.gettext(translatable)
-                    )
                     try:
-                        new_node = etree.fromstring(content.encode('utf-8'))
+                        new_node = etree.Element(child.tag, **child.attrib)
+                        new_node.text = translations.gettext(translatable)
                         root.remove(child)
                         root.insert(idx, new_node)
                     except etree.ParseError:

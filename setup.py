@@ -11,5 +11,5 @@ setup(
     author='GISCE-TI, S.L.',
     author_email='devel@gisce.net',
     test_suite="tests",
-    description=''
+    description='i18n extension for Python Markdown'
 )

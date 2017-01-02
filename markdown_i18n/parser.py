@@ -25,8 +25,7 @@ class I18NTreeProcessor(Treeprocessor):
                 translatable = child.text or ''
                 translatable += '\n'.join([
                     etree.tostring(c) for c in
-                        child.getchildren() if
-                            c.tag != 'code'
+                        child.getchildren()
                 ])
                 if translatable:
                     catalog.add(translatable)

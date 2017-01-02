@@ -271,3 +271,16 @@ Content 1     | Content 2
         )
 
         self.assertEqual(clean_xml(expected), clean_xml(result))
+
+    def test_code_tag(self):
+        text = 'ports like: `"com1", "com2"`'
+        expected = '<p>puertos como: <code>"com1", "com2"</code></p>'
+
+        self.catalog.add(
+            'ports like: <code>"com1", "com2"</code>',
+            'puertos como:<code>"com1", "com2"</code>'
+        )
+        self.write_mo()
+
+        result = self.markdown(text)
+        self.assertEqual(clean_xml(result), clean_xml(expected))

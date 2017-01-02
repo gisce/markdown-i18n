@@ -306,3 +306,41 @@ Content 1     | Content 2
                 }
             )
         self.assertEqual(clean_xml(expected), clean_xml(result))
+
+    def test_admonition(self):
+
+        with TempDir() as d:
+
+            text = (
+                "!!!note\n"
+                "    This is a note."
+            )
+
+            expected = (
+                '<div class="admonition note">'
+                '    <p class="admonition-title">Note</p>'
+                '    <p>Esto es una nota.</p>'
+                '</div>'
+            )
+
+            c = catalog.Catalog(locale='es_ES')
+            c.add("This is a note.", "Esto es una nota.")
+            os.mkdir(os.path.join(d.dir, 'es_ES'))
+            lc_messages = os.path.join(d.dir, 'es_ES', 'LC_MESSAGES')
+            os.mkdir(lc_messages)
+            mo_file = os.path.join(lc_messages, 'messages.mo')
+            with open(mo_file, 'w') as f:
+                mofile.write_mo(f, c)
+
+            result = markdown(
+                text,
+                extensions=['markdown.extensions.admonition', 'markdown_i18n'],
+                extension_configs={
+                    'markdown_i18n': {
+                        'i18n_dir': d.dir,
+                        'i18n_lang': 'es_ES'
+                    }
+                }
+            )
+
+        self.assertEqual(clean_xml(expected), clean_xml(result))

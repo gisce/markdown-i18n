@@ -1,8 +1,20 @@
 sudo: false
 language: python
 python:
-  - "2.7"
+- '2.7'
 install:
-  - "pip install ."
+- pip install .
+- pip install coveralls
 script:
-  - python setup.py test
+- coverage run setup.py test
+after_success:
+- coveralls
+- coverage report
+deploy:
+  provider: pypi
+  user: gisce
+  password:
+    secure: klkyi2/ppN8M163d/6G1FbjRT2L4+qp7IGelWDhCluXwfI5FD4yYYFAvOtVCxS63tEsMJCDs93e5ltG/bNZxq3V6wKblADT7KLlmJujHK7FB3HNdN8Q9hU0PDsxIl00ixavcfXCRqBx/Y25S2/SppAT4HYH3QjGJfrQFvyzTc3s9pLarAXu4vLKE+LwGI4Fx71MM/2S5I4Gixg0uxQjTlgLJ21OkNJ0gPJqqFt+n+s3m2vWE5SFG4LlitnAHk1Rq/finjwHbWFUjuqBvprHQEVHpGQQutiMxKk1sledHsIdVPmL2IcNgPhOFzQdDQcEW3aRUf7GE6LZJIqaFf2eLjJkv1Z6BLt9j9rLH4dlIa0PB7s4L8dg+bOxmIQE9WgMSxc+vdriUnJ2n+7XwyfCR8JF6WsoEO/nYfyKHz1yjwomQZh1oHJahXUJzgnSBYQFTA7PGq5u+rmcfovCxC4MUQtIoX7gFnwCN3yjZfQP62TS0gHwg1Bsu1LIC0PHNwqaCVPrezTVZeSCW3uI7QH53/cAcyNtSu5jpwpqd+yR1z9f2SkUZYWl2QXQOdteAl+WUh527Fu8udevhEt1ENGZcqBIQVj9NRzSAYIURnReNzNDRPZMG1XZ3wgLCjsxk7nZlKiTOKrvL4Io2F3BHMGd79uKjioA3F5HEVzk43F6NswI=
+  on:
+    tags: true
+    repo: gisce/markdown-i18n

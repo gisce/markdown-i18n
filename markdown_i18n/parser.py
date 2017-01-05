@@ -6,7 +6,7 @@ from markdown.treeprocessors import Treeprocessor
 from markdown.util import etree
 
 from babel.messages.catalog import Catalog
-from babel.messages import pofile
+from babel.messages import pofile, mofile
 from babel.support import Translations
 
 TRANSLATE_TAGS_RE = re.compile('^(li|p|h[1-6]|th|td)$')
@@ -56,6 +56,15 @@ class I18NTreeProcessor(Treeprocessor):
             catalog = Catalog()
 
         lang = self.extension.getConfig('i18n_lang')
+        mo_path = os.path.join(i18n_dir, lang, 'LC_MESSAGES', 'messages.mo')
+        po_path = os.path.join(i18n_dir, lang, 'LC_MESSAGES', 'messages.po')
+
+        if os.path.exists(po_path):
+            with open(po_path, 'r') as f:
+                lang_catalog = pofile.read_po(f)
+            with open(mo_path, 'w') as mo:
+                mofile.write_mo(mo, lang_catalog)
+
         translations = Translations.load(i18n_dir, locales=[lang])
         self.translate(catalog, translations, root)
 

@@ -36,14 +36,14 @@ class I18nTest(unittest.TestCase):
         os.mkdir(os.path.join(self.dir, locale))
         lc_messages = os.path.join(self.dir, locale, 'LC_MESSAGES')
         os.mkdir(lc_messages)
-        self.mo_file = os.path.join(lc_messages, 'messages.mo')
+        self.po_file = os.path.join(lc_messages, 'messages.po')
 
     def tearDown(self):
         shutil.rmtree(self.dir)
 
-    def write_mo(self):
-        with open(self.mo_file, 'w') as f:
-            mofile.write_mo(f, self.catalog)
+    def write_po(self):
+        with open(self.po_file, 'w') as f:
+            pofile.write_po(f, self.catalog)
 
     def markdown(self, text, extensions=None, extension_configs=None):
         if extensions is None:
@@ -83,7 +83,7 @@ class I18nTest(unittest.TestCase):
         expected = '<p>esto es un simple test</p>'
 
         self.catalog.add("this is a simple text", "esto es un simple test")
-        self.write_mo()
+        self.write_po()
 
         result = self.markdown(text)
         self.assertEqual(expected, result)
@@ -93,7 +93,7 @@ class I18nTest(unittest.TestCase):
         expected = '<p>esto es un simple\ntest</p>'
 
         self.catalog.add("this is a simple\ntext", "esto es un simple\ntest")
-        self.write_mo()
+        self.write_po()
 
         result = self.markdown(text)
         self.assertEqual(expected, result)
@@ -103,7 +103,7 @@ class I18nTest(unittest.TestCase):
         expected = '<p>esto es un simple "test"</p>'
 
         self.catalog.add('this is a simple "text"', 'esto es un simple "test"')
-        self.write_mo()
+        self.write_po()
 
         result = self.markdown(text)
         self.assertEqual(expected, result)
@@ -115,7 +115,7 @@ class I18nTest(unittest.TestCase):
 
         self.catalog.add('paragraph 1', 'parrafo 1')
         self.catalog.add('paragraph 2', 'parrafo 2')
-        self.write_mo()
+        self.write_po()
 
         result = self.markdown(text)
         self.assertEqual(expected, result)
@@ -158,7 +158,7 @@ class I18nTest(unittest.TestCase):
 
         self.catalog.add("First element.", "Primer elemento.")
         self.catalog.add("Second element.", "Segundo elemento.")
-        self.write_mo()
+        self.write_po()
 
         result = self.markdown(text)
         self.assertEqual(clean_xml(expected), clean_xml(result))
@@ -173,7 +173,7 @@ class I18nTest(unittest.TestCase):
 
         self.catalog.add("First element.", "Primer elemento.")
         self.catalog.add("Second element.", "Segundo elemento.")
-        self.write_mo()
+        self.write_po()
 
         result = self.markdown(text)
         self.assertEqual(clean_xml(expected), clean_xml(result))
@@ -240,7 +240,7 @@ Content 1     | Content 2
         self.catalog.add("Second Header", "Encabezamiento segundo")
         self.catalog.add("Content 1", "Contenido 1")
         self.catalog.add("Content 2", "Contenido 2")
-        self.write_mo()
+        self.write_po()
 
         result = self.markdown(
             text,
@@ -263,7 +263,7 @@ Content 1     | Content 2
         )
 
         self.catalog.add("This is a note.", "Esto es una nota.")
-        self.write_mo()
+        self.write_po()
 
         result = self.markdown(
             text,
@@ -280,7 +280,7 @@ Content 1     | Content 2
             'ports like: <code>"com1", "com2"</code>',
             'puertos como:<code>"com1", "com2"</code>'
         )
-        self.write_mo()
+        self.write_po()
 
         result = self.markdown(text)
         self.assertEqual(clean_xml(result), clean_xml(expected))

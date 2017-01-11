@@ -1,3 +1,4 @@
+# encoding=utf-8
 from __future__ import unicode_literals
 import unittest
 import os
@@ -314,3 +315,18 @@ Content 1     | Content 2
         md.convert(text)
         toc = getattr(md, 'toc', '')
         self.assertEqual(clean_xml(toc), clean_xml(expected_toc))
+
+    def test_original_string_unscaped_entities(self):
+        text = '**Hello** Voilà'
+        expected_original = '<strong>Hello</strong> Voilà'
+
+        self.markdown(text)
+
+        pot_file = os.path.join(self.dir, 'messages.pot')
+
+        with open(pot_file, 'r') as f:
+            po = pofile.read_po(f)
+
+        self.assertEqual(
+            clean_xml(po._messages.keys()[0]), clean_xml(expected_original)
+        )

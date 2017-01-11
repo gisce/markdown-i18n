@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 import os
 import re
+import HTMLParser
 
 from markdown.treeprocessors import Treeprocessor
 from markdown.util import etree
@@ -17,6 +18,7 @@ class I18NTreeProcessor(Treeprocessor):
     def __init__(self, md, extension):
         self.extension = extension
         super(I18NTreeProcessor, self).__init__(md)
+        self.parser = HTMLParser.HTMLParser()
 
     def translate(self, catalog, translations, root):
         children = root.getchildren()
@@ -28,7 +30,7 @@ class I18NTreeProcessor(Treeprocessor):
                         child.getchildren()
                 ])
                 if translatable:
-                    catalog.add(translatable)
+                    catalog.add(self.parser.unescape(translatable))
                     attrs = ' '.join((
                         '{}="{}"'.format(k, v) for k, v in child.attrib.items()
                     ))

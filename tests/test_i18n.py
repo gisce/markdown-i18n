@@ -5,13 +5,13 @@ import tempfile
 import shutil
 import re
 
-from markdown import markdown
+from markdown import markdown, Markdown
 
 from babel.messages import pofile, mofile, catalog
 
 
 def clean_xml(xml_string):
-    return re.sub('\s+<', '<', xml_string)
+    return re.sub('\s+<', '<', xml_string).strip()
 
 
 class TempDir(object):
@@ -123,7 +123,7 @@ class I18nTest(unittest.TestCase):
     def test_headers(self):
         for x in range(1, 7):
             text = "{0} This is a h{1}".format('#' * x, x)
-            expected = '<h{0} id="this-is-a-h{0}">Esto es un h{0}</h{0}>'.format(x)
+            expected = '<h{0} id="esto-es-un-h{0}">Esto es un h{0}</h{0}>'.format(x)
 
             with TempDir() as d:
 
@@ -284,3 +284,33 @@ Content 1     | Content 2
 
         result = self.markdown(text)
         self.assertEqual(clean_xml(result), clean_xml(expected))
+
+    def test_i18n_always_after_toc(self):
+        text = '# This is h1'
+        expected_toc = (
+            '<div class="toc">'
+            '    <ul>'
+            '        <li><a href="#esto-es-h1">Esto es h1</a></li>'
+            '    </ul>'
+            '</div>'
+        )
+
+        self.catalog.add(
+            'This is h1',
+            'Esto es h1'
+        )
+        self.write_po()
+
+        md = Markdown(
+            extensions=['markdown.extensions.toc', 'markdown_i18n'],
+            extension_configs={
+                'markdown_i18n': {
+                    'i18n_dir': self.dir,
+                    'i18n_lang': 'es_ES'
+                }
+            }
+        )
+
+        md.convert(text)
+        toc = getattr(md, 'toc', '')
+        self.assertEqual(clean_xml(toc), clean_xml(expected_toc))

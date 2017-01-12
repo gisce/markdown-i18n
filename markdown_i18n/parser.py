@@ -30,7 +30,8 @@ class I18NTreeProcessor(Treeprocessor):
                         child.getchildren()
                 ])
                 if translatable:
-                    catalog.add(self.parser.unescape(translatable))
+                    translatable = self.parser.unescape(translatable)
+                    catalog.add(translatable)
                     attrs = ' '.join((
                         '{}="{}"'.format(k, v) for k, v in child.attrib.items()
                     ))

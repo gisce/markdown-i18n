@@ -319,8 +319,15 @@ Content 1     | Content 2
     def test_original_string_unscaped_entities(self):
         text = '**Hello** Voilà'
         expected_original = '<strong>Hello</strong> Voilà'
+        expect_text = '<p><strong>Hola</strong> Voilà</p>'
 
-        self.markdown(text)
+        self.catalog.add(
+            '<strong>Hello</strong> Voilà',
+            '<strong>Hola</strong> Voilà'
+        )
+        self.write_po()
+
+        result = self.markdown(text)
 
         pot_file = os.path.join(self.dir, 'messages.pot')
 
@@ -330,3 +337,5 @@ Content 1     | Content 2
         self.assertEqual(
             clean_xml(po._messages.keys()[0]), clean_xml(expected_original)
         )
+
+        self.assertEqual(clean_xml(result), clean_xml(expect_text))

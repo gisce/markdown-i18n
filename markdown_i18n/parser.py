@@ -9,6 +9,7 @@ from markdown.util import etree
 from babel.messages.catalog import Catalog
 from babel.messages import pofile, mofile
 from babel.support import Translations
+from six import binary_type
 
 TRANSLATE_TAGS_RE = re.compile('^(li|p|h[1-6]|th|td)$')
 
@@ -36,8 +37,12 @@ class I18NTreeProcessor(Treeprocessor):
                         '{}="{}"'.format(k, v) for k, v in child.attrib.items()
                     ))
                     translated = translations.gettext(translatable)
+
+                    if isinstance(translated, binary_type):
+                        translated = translated.decode('utf-8')
+
                     content = '<{0} {2}>{1}</{0}>'.format(
-                        child.tag, translated.decode('utf-8'), attrs
+                        child.tag, translated, attrs
                     )
                     try:
                         new_node = etree.fromstring(content.encode('utf-8'))

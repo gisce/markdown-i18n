@@ -13,12 +13,13 @@ class I18NExtension(Extension):
         self.md = None
         super(I18NExtension, self).__init__(**kwargs)
 
-    def extendMarkdown(self, md, md_globals):
-        md.treeprocessors.add('i18n', I18NTreeProcessor(md, self), '_end')
+    def extendMarkdown(self, md):
         md.registerExtension(self)
+        md.treeprocessors.register(
+            I18NTreeProcessor(md, self), 'i18n', 200)
         self.md = md
 
     def reset(self):
         if not self.toc_found and 'toc' in self.md.treeprocessors:
-            self.md.treeprocessors.link('i18n', '<toc')
+            #self.md.treeprocessors.link('i18n', '<toc')
             self.toc_found = True

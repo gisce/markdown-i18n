@@ -8,6 +8,11 @@ setup(
     url='https://github.com/gisce/markdown-i18n',
     license='MIT',
     install_requires=['Markdown', 'babel', 'six'],
+    entry_point={
+        'markdown.extensions': [
+            'markdown_i18n = markdown_i18n.extension.py:I18NExtension'
+        ]
+    },
     author='GISCE-TI, S.L.',
     author_email='devel@gisce.net',
     test_suite="tests",

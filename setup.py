@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='markdown-i18n',
-    version='2.1.2',
+    version='3.0.0',
     packages=find_packages(),
     url='https://github.com/gisce/markdown-i18n',
     license='MIT',

@@ -7,7 +7,7 @@ Markdown i18n
 .. image:: https://coveralls.io/repos/github/gisce/markdown-i18n/badge.svg
     :target: https://coveralls.io/github/gisce/markdown-i18n
 
-This is an extension for `Python Markdown <http://pythonhosted.org/Markdown/>`_
+This is an extension for `Python Markdown <https://python-markdown.github.io/>`_
 
 Install
 -------
